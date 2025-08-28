@@ -11,21 +11,16 @@ plt.switch_backend('Agg')
 
 def setup_chinese_font():
     """
-    设置中文字体，支持 macOS 和 Linux 系统。
+    设置中文字体，优先使用本地 Hiragino Sans GB.ttc 字体文件。
     """
-    # 设置字体优先级列表
-    font_list = ['PingFang SC', 'Noto Sans CJK SC', 'SimHei', 'Heiti TC', 'DejaVu Sans']
+    # 首先尝试使用本地字体文件
+    local_font_path = 'Hiragino Sans GB.ttc'
+    if os.path.exists(local_font_path):
+        print(f"成功找到本地中文字体: {local_font_path}")
+        return fm.FontProperties(fname=local_font_path)
     
-    # macOS 系统特定字体路径
-    if os.name == 'posix' and 'darwin' in os.uname().sysname.lower():
-        font_dirs = ['/System/Library/Fonts', '/Library/Fonts', '~/Library/Fonts']
-        target_font = 'PingFang.ttc'
-        
-        for dir_path in font_dirs:
-            font_path = os.path.join(os.path.expanduser(dir_path), target_font)
-            if os.path.exists(font_path):
-                print(f"成功找到 macOS 中文字体: {font_path}")
-                return fm.FontProperties(fname=font_path)
+    # 设置字体优先级列表作为备选
+    font_list = ['Hiragino Sans GB', 'PingFang SC', 'Noto Sans CJK SC', 'SimHei', 'Heiti TC', 'DejaVu Sans']
     
     # 通用字体设置
     plt.rcParams['font.sans-serif'] = font_list
