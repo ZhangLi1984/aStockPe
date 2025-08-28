@@ -32,16 +32,21 @@ jobs:
         sudo apt-get install -y fonts-noto-cjk
         fc-cache -fv
         
-    - name: 生成股债利差图表
+    - name: 生成股债利差图表和数据
       run: python 国债利差均线.py
         
-    - name: 生成巴菲特指标图表
+    - name: 生成巴菲特指标图表和数据
       run: python 巴菲特指标可视化图表.py
+      
+    - name: 生成AI市场分析
+      run: python AKShareSummer.py
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         
-    - name: 提交更新的图表
+    - name: 提交更新的图表和分析
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add *.png
-        git diff --staged --quiet || git commit -m "自动更新图表 - $(date +'%Y-%m-%d %H:%M:%S')"
+        git add *.png *.csv *.json *.md
+        git diff --staged --quiet || git commit -m "自动更新图表和AI分析 - $(date +'%Y-%m-%d %H:%M:%S')"
         git push
