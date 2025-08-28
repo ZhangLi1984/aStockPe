@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股债利差与巴菲特指标分析</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 40px;
+        }
+        .chart-section {
+            margin-bottom: 50px;
+        }
+        .chart-section h2 {
+            color: #333;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .update-info {
+            background: #e8f4fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+        .description {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>股债利差与巴菲特指标分析</h1>
+            <p>基于 AKShare 数据的量化投资分析图表</p>
+        </div>
+        
+        <div class="content">
+            <div class="update-info">
+                <strong>📊 数据更新时间：</strong>每日 09:00 和 16:00 (北京时间) 自动更新
+            </div>
+            
+            <div class="chart-section">
+                <h2>📈 股债利差分析</h2>
+                <div class="description">
+                    <p><strong>股债利差</strong>是衡量股票相对于债券吸引力的重要指标。通过5年滚动均线和标准差通道，可以识别市场的极端估值区域，为投资决策提供参考。</p>
+                    <ul>
+                        <li>当股债利差位于+2标准差以上时，通常表示股票相对债券具有较高吸引力</li>
+                        <li>当股债利差位于-2标准差以下时，可能暗示股票估值偏高</li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <img src="equity_bond_spread.png" alt="股债利差分析图表" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display:none; padding: 40px; color: #999; font-style: italic;">
+                        图表正在生成中，请稍后刷新页面...
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-section">
+                <h2>💰 巴菲特指标分析</h2>
+                <div class="description">
+                    <p><strong>巴菲特指标</strong>（总市值/GDP）是沃伦·巴菲特推崇的市场估值指标，被誉为"可能是在任何时候衡量估值水平的最佳单一指标"。</p>
+                    <ul>
+                        <li><span style="color: #4CAF50;">绿色区域 (&lt;80%)</span>：低估区域，历史上较好的买入时机</li>
+                        <li><span style="color: #FFC107;">黄色区域 (80%-100%)</span>：合理估值区域</li>
+                        <li><span style="color: #FF9800;">橙色区域 (100%-120%)</span>：高估区域，需要谨慎</li>
+                        <li><span style="color: #F44336;">红色区域 (&gt;120%)</span>：危险区域，历史上的泡沫水平</li>
+                    </ul>
+                </div>
+                <div class="chart-container">
+                    <img src="buffett_indicator.png" alt="巴菲特指标分析图表" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display:none; padding: 40px; color: #999; font-style: italic;">
+                        图表正在生成中，请稍后刷新页面...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>数据来源：AKShare | 图表自动生成于 GitHub Actions</p>
+            <p>⚠️ 本分析仅供参考，不构成投资建议。投资有风险，入市需谨慎。</p>
+        </div>
+    </div>
+</body>
+</html>
