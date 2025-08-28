@@ -135,6 +135,11 @@ def plot_equity_bond_spread():
         plt.savefig('equity_bond_spread.png', dpi=300, bbox_inches='tight', facecolor='white')
         print("股债利差图表已保存为 equity_bond_spread.png")
         plt.close()
+        
+        # 保存数据为CSV
+        print("正在保存股债利差数据为CSV...")
+        stock_ebs_lg_df.to_csv('equity_bond_spread_data.csv', encoding='utf-8-sig')
+        print("股债利差数据已保存为 equity_bond_spread_data.csv")
 
     except Exception as e:
         print(f"执行过程中发生错误: {e}")

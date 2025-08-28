@@ -79,6 +79,58 @@
             margin: 20px 0;
             color: #555;
         }
+        .market-analysis-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        .market-analysis-section h2 {
+            margin-top: 0;
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+        .analysis-content {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+            line-height: 1.6;
+        }
+        .analysis-content .loading {
+            text-align: center;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        .analysis-footer {
+            text-align: right;
+            opacity: 0.8;
+            font-size: 0.9em;
+        }
+        .risk-opportunity {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+        .risk-box, .opportunity-box {
+            flex: 1;
+            padding: 15px;
+            margin: 0 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .risk-box {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+        .opportunity-box {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -91,6 +143,17 @@
         <div class="content">
             <div class="update-info">
                 <strong>📊 数据更新时间：</strong>每日 09:00 和 16:00 (北京时间) 自动更新
+            </div>
+            
+            <!-- AI市场分析区域 -->
+            <div id="market-analysis" class="market-analysis-section">
+                <h2>🤖 AI市场分析</h2>
+                <div id="analysis-content" class="analysis-content">
+                    <div class="loading">正在加载市场分析...</div>
+                </div>
+                <div class="analysis-footer">
+                    <small>分析更新时间: <span id="analysis-time">--</span> | 基于巴菲特指标、股债利差等核心数据</small>
+                </div>
             </div>
             
             <div class="chart-section">
@@ -135,5 +198,36 @@
             <p>⚠️ 本分析仅供参考，不构成投资建议。投资有风险，入市需谨慎。</p>
         </div>
     </div>
+    
+    <script>
+        // 加载市场分析数据
+        async function loadMarketAnalysis() {
+            try {
+                const response = await fetch('market_analysis.json');
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('analysis-content').innerHTML = 
+                        '<div class="markdown-content">' + 
+                        data.analysis.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') +
+                        '</div>';
+                    document.getElementById('analysis-time').textContent = 
+                        new Date(data.timestamp).toLocaleString('zh-CN');
+                } else {
+                    document.getElementById('analysis-content').innerHTML = 
+                        '<div class="error">暂无市场分析数据，请稍后刷新页面</div>';
+                }
+            } catch (error) {
+                console.error('加载市场分析失败:', error);
+                document.getElementById('analysis-content').innerHTML = 
+                    '<div class="error">加载市场分析失败，请检查网络连接</div>';
+            }
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', loadMarketAnalysis);
+        
+        // 每5分钟自动刷新一次
+        setInterval(loadMarketAnalysis, 5 * 60 * 1000);
+    </script>
 </body>
 </html>

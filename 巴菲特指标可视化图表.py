@@ -128,6 +128,11 @@ def plot_buffett_indicator():
         plt.savefig('buffett_indicator.png', dpi=300, bbox_inches='tight', facecolor='white')
         print("巴菲特指标图表已保存为 buffett_indicator.png")
         plt.close()
+        
+        # 保存数据为CSV
+        print("正在保存巴菲特指标数据为CSV...")
+        buffett_df.to_csv('buffett_indicator_data.csv', encoding='utf-8-sig')
+        print("巴菲特指标数据已保存为 buffett_indicator_data.csv")
 
     except Exception as e:
         print(f"执行过程中发生错误: {e}")
