@@ -6,28 +6,42 @@ import matplotlib.font_manager as fm
 import os
 from matplotlib import dates as mdates
 
-def setup_macos_chinese_font():
+# 设置非交互式后端，支持GitHub Actions
+plt.switch_backend('Agg')
+
+def setup_chinese_font():
     """
-    专门为 macOS 系统查找并设置可用的中文字体。
-    会优先在系统字体目录中寻找 'PingFang.ttc'。
+    设置中文字体，支持 macOS 和 Linux 系统。
     """
-    font_dirs = ['/System/Library/Fonts', '/Library/Fonts', '~/Library/Fonts']
-    target_font = 'PingFang.ttc'
+    # 设置字体优先级列表
+    font_list = ['PingFang SC', 'Noto Sans CJK SC', 'SimHei', 'Heiti TC', 'DejaVu Sans']
     
-    for dir_path in font_dirs:
-        font_path = os.path.join(os.path.expanduser(dir_path), target_font)
-        if os.path.exists(font_path):
-            print(f"成功找到 macOS 中文字体: {font_path}")
-            return fm.FontProperties(fname=font_path)
+    # macOS 系统特定字体路径
+    if os.name == 'posix' and 'darwin' in os.uname().sysname.lower():
+        font_dirs = ['/System/Library/Fonts', '/Library/Fonts', '~/Library/Fonts']
+        target_font = 'PingFang.ttc'
+        
+        for dir_path in font_dirs:
+            font_path = os.path.join(os.path.expanduser(dir_path), target_font)
+            if os.path.exists(font_path):
+                print(f"成功找到 macOS 中文字体: {font_path}")
+                return fm.FontProperties(fname=font_path)
+    
+    # 通用字体设置
+    plt.rcParams['font.sans-serif'] = font_list
+    plt.rcParams['axes.unicode_minus'] = False
+    
+    # 尝试找到可用的中文字体
+    for font_name in font_list:
+        try:
+            font_prop = fm.FontProperties(family=font_name)
+            fm.findfont(font_prop)
+            print(f"使用字体: {font_name}")
+            return font_prop
+        except Exception:
+            continue
             
-    print("警告: 在 macOS 系统目录中未找到 'PingFang.ttc' 字体。")
-    try:
-        font_prop = fm.FontProperties(family='Heiti TC')
-        fm.findfont(font_prop)
-        print("备用方案：找到 'Heiti TC' 字体。")
-        return font_prop
-    except Exception:
-        print("备用方案 'Heiti TC' 也未找到。")
+    print("警告: 未找到合适的中文字体，可能影响显示效果。")
     return None
 
 
@@ -37,7 +51,7 @@ def plot_buffett_indicator():
     - 阈值区域：根据通用阈值划分估值区域，提供直观参考。
     - 历史分位：量化当前估值在历史长河中的位置。
     """
-    chinese_font_prop = setup_macos_chinese_font()
+    chinese_font_prop = setup_chinese_font()
     plt.rcParams['axes.unicode_minus'] = False
 
     try:
@@ -115,8 +129,10 @@ def plot_buffett_indicator():
         ax1.grid(True, which='major', axis='y', linestyle='--', linewidth=0.7)
         fig.tight_layout()
         
-        print("图表生成完毕，即将显示。")
-        plt.show()
+        print("图表生成完毕，正在保存...")
+        plt.savefig('buffett_indicator.png', dpi=300, bbox_inches='tight', facecolor='white')
+        print("巴菲特指标图表已保存为 buffett_indicator.png")
+        plt.close()
 
     except Exception as e:
         print(f"执行过程中发生错误: {e}")
